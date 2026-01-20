@@ -62,6 +62,12 @@
   margin-bottom: 10px;
 }
 
+.section-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
 .section-header h2 {
   margin: 0;
   font-size: 1.5rem;
@@ -184,6 +190,30 @@
   font-size: 0.9rem;
 }
 
+.field-label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.text-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
 .btn-ghost {
   background: transparent;
   color: #2d3748;
@@ -194,6 +224,35 @@
 .btn-ghost:hover {
   background: #edf2f7;
   border-color: #cbd5e0;
+}
+
+.dual-output {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .dual-output {
+    grid-template-columns: 1fr;
+  }
+}
+
+.output-card {
+  background: #f8f9fa;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.output-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
 }
 
 /* Textarea */

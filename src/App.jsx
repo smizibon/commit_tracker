@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import './App.css';
 import ErrorDisplay from './components/ErrorDisplay';
-import { parseCsvToTsv } from './utils/parseCsvToTsv';
+import { parseCsvRows } from './utils/parseCsvToTsv';
 import { createSafeAsync } from './utils/errorHandler';
 
 function App() {
   const [csvInput, setCsvInput] = useState('');
-  const [tsvOutput, setTsvOutput] = useState('');
+  const [commitOutput, setCommitOutput] = useState('');
+  const [messageOutput, setMessageOutput] = useState('');
+  const [rowsData, setRowsData] = useState([]);
+  const [baseUrl, setBaseUrl] = useState('https://bitbucket.org/tigerit/communicator-desktop-pwa/commits/');
   const [error, setError] = useState('');
-  const [copied, setCopied] = useState(false);
+  const [commitCopied, setCommitCopied] = useState(false);
+  const [messageCopied, setMessageCopied] = useState(false);
   const [snippetCopied, setSnippetCopied] = useState(false);
   const runSafeAsync = createSafeAsync(setError);
 
@@ -19,15 +23,22 @@ function App() {
   const gitLogCommand = `git log --pretty=format:'"%H","%s"' > commits.csv`;
 
   const processCSV = () => {
-    setCopied(false);
+    setCommitCopied(false);
+    setMessageCopied(false);
     setSnippetCopied(false);
     try {
-      const tsvResult = parseCsvToTsv(csvInput);
-      setTsvOutput(tsvResult);
+      const rows = parseCsvRows(csvInput, baseUrl);
+      const commits = rows.map((row) => row?.[0] ?? '').join('\n');
+      const messages = rows.map((row) => row?.[1] ?? '').join('\n');
+      setRowsData(rows);
+      setCommitOutput(commits);
+      setMessageOutput(messages);
       setError('');
     } catch (err) {
       setError(err.message);
-      setTsvOutput('');
+      setRowsData([]);
+      setCommitOutput('');
+      setMessageOutput('');
     }
   };
 
@@ -46,8 +57,11 @@ function App() {
       const content = e.target.result;
       setCsvInput(content);
       setError('');
-      setTsvOutput('');
-      setCopied(false);
+      setCommitOutput('');
+      setMessageOutput('');
+      setRowsData([]);
+      setCommitCopied(false);
+      setMessageCopied(false);
       setSnippetCopied(false);
     };
     reader.onerror = () => {
@@ -58,27 +72,63 @@ function App() {
 
   const copyToClipboard = () =>
     runSafeAsync(async () => {
-      if (!tsvOutput) {
+      if (!rowsData.length) {
         throw new Error('No output to copy');
       }
-      await navigator.clipboard.writeText(tsvOutput);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 3000);
+      const tsv = rowsData
+        .map((row) => {
+          const [c = '', m = ''] = row;
+          return `${c}\t${m}`;
+        })
+        .join('\n');
+      await navigator.clipboard.writeText(tsv);
+      setCommitCopied(true);
+      setMessageCopied(true);
+      setTimeout(() => {
+        setCommitCopied(false);
+        setMessageCopied(false);
+      }, 3000);
+    });
+
+  const copyCommitColumn = () =>
+    runSafeAsync(async () => {
+      if (!commitOutput) throw new Error('No commit column to copy');
+      await navigator.clipboard.writeText(commitOutput);
+      setCommitCopied(true);
+      setTimeout(() => setCommitCopied(false), 3000);
+    });
+
+  const copyMessageColumn = () =>
+    runSafeAsync(async () => {
+      if (!messageOutput) throw new Error('No message column to copy');
+      await navigator.clipboard.writeText(messageOutput);
+      setMessageCopied(true);
+      setTimeout(() => setMessageCopied(false), 3000);
     });
 
   const loadSampleData = () => {
     setCsvInput(sampleData);
     setError('');
-    setTsvOutput('');
-    setCopied(false);
+    setCommitOutput('');
+    setMessageOutput('');
+    setRowsData([]);
+    setCommitCopied(false);
+    setMessageCopied(false);
     setSnippetCopied(false);
+  };
+
+  const handleBaseUrlChange = (e) => {
+    setBaseUrl(e.target.value);
   };
 
   const clearAll = () => {
     setCsvInput('');
-    setTsvOutput('');
+    setCommitOutput('');
+    setMessageOutput('');
+    setRowsData([]);
     setError('');
-    setCopied(false);
+    setCommitCopied(false);
+    setMessageCopied(false);
     setSnippetCopied(false);
   };
 
@@ -148,6 +198,19 @@ function App() {
               <pre className="code-snippet__block" data-testid="git-log-snippet">{gitLogCommand}</pre>
             </div>
 
+            <label className="field-label" htmlFor="base-url-input">
+              Commit base URL (used to build hyperlinks)
+            </label>
+            <input
+              id="base-url-input"
+              className="text-input"
+              type="text"
+              value={baseUrl}
+              onChange={handleBaseUrlChange}
+              placeholder="https://bitbucket.org/org/repo/commits/"
+              data-testid="base-url-input"
+            />
+
             <textarea
               className="textarea"
               placeholder='Paste your CSV data here...&#10;&#10;Example:&#10;"commit_hash","commit_message"&#10;"abc123","Fixed bug in component"'
@@ -169,34 +232,67 @@ function App() {
           {/* Output Section */}
           <div className="section">
             <div className="section-header">
-              <h2>Excel-Ready Output (TSV)</h2>
-              {tsvOutput && (
+              <h2>Excel-Ready Columns</h2>
+              {(commitOutput || messageOutput) && (
                 <button
                   onClick={copyToClipboard}
                   className="btn btn-success"
                   data-testid="copy-to-clipboard-button"
                 >
-                  {copied ? '✓ Copied!' : '📋 Copy to Clipboard'}
+                  {commitCopied && messageCopied ? '✓ Both Copied' : '📋 Copy Both'}
                 </button>
               )}
             </div>
 
             <ErrorDisplay message={error} />
 
-            <textarea
-              className="textarea output"
-              placeholder="Processed output will appear here...&#10;&#10;Copy and paste directly into Excel!"
-              value={tsvOutput}
-              readOnly
-              rows={10}
-              data-testid="tsv-output-textarea"
-            />
-
-            {tsvOutput && (
-              <div className="info-message">
-                ℹ️ Click "Copy to Clipboard" then paste (Cmd+V / Ctrl+V) into Excel. Each field will go into a separate cell.
+            <div className="dual-output">
+              <div className="output-card">
+                <div className="output-card__header">
+                  <h3>Commit (with hyperlink)</h3>
+                  {commitOutput && (
+                    <button
+                      onClick={copyCommitColumn}
+                      className="btn btn-ghost"
+                      data-testid="copy-commit-column"
+                    >
+                      {commitCopied ? '✓ Copied' : '📋 Copy'}
+                    </button>
+                  )}
+                </div>
+                <textarea
+                  className="textarea output"
+                  placeholder="Commit IDs (hyperlinks) will appear here"
+                  value={commitOutput}
+                  readOnly
+                  rows={10}
+                  data-testid="commit-output-textarea"
+                />
               </div>
-            )}
+
+              <div className="output-card">
+                <div className="output-card__header">
+                  <h3>Commit Message</h3>
+                  {messageOutput && (
+                    <button
+                      onClick={copyMessageColumn}
+                      className="btn btn-ghost"
+                      data-testid="copy-message-column"
+                    >
+                      {messageCopied ? '✓ Copied' : '📋 Copy'}
+                    </button>
+                  )}
+                </div>
+                <textarea
+                  className="textarea output"
+                  placeholder="Commit messages will appear here"
+                  value={messageOutput}
+                  readOnly
+                  rows={10}
+                  data-testid="message-output-textarea"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
