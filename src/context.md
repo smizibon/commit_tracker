@@ -1,32 +1,17 @@
-# Source Code Context
+# Source Context (AI-lean)
 
 ## App.jsx
-Main component
-State: csvInput, tsvOutput, error, copied
-Functions:
-  processCSV() - CSV→TSV via parseCsvToTsv util
-  handleFileUpload() - reads .csv/.txt files
-  copyToClipboard() - navigator.clipboard API via createSafeAsync
-  loadSampleData() - test data loader
-  clearAll() - reset state
-UI: 2-column layout (input|output)
-data-testids: load-sample-button, clear-all-button, file-input, csv-textarea, process-data-button, copy-to-clipboard-button, tsv-output-textarea
+State: csvInput, commitOutput, messageOutput, rowsData, baseUrl, error, commitCopied, messageCopied, snippetCopied, snippetCopied50.
+Key handlers: processCSV (parseCsvRows with baseUrl, builds commit/message outputs), handleFileUpload, copyCommitColumn, copyMessageColumn, copyToClipboard (TSV both), loadSampleData, clearAll, copyGitSnippet, copyGitSnippet50, handleBaseUrlChange.
+UI: Input section (file upload, git log snippet, git log -n 50 snippet, base URL input); Dual outputs (commit column with hyperlinks, message column) + copy buttons. Layout grid.
+Testids include: load-sample-button, clear-all-button, file-input, csv-textarea, process-data-button, copy-to-clipboard-button, commit-output-textarea, message-output-textarea, copy-commit-column, copy-message-column, git-log-snippet, git-log-snippet-50, copy-git-snippet-button, copy-git-snippet-50-button, base-url-input.
 
 ## App.css
-Layout: flexbox grid
-Theme: purple gradient (#667eea→#764ba2)
-Responsive: 2-col desktop, 1-col mobile
-Components: .btn, .textarea, .error-message, .info-message, .file-upload
+Gradient header; grid layout; buttons (primary/secondary/success/ghost); file-upload; code-snippet blocks; dual-output cards; text inputs; responsive single-column under ~900px.
 
-## Dependencies
-papaparse - CSV parser (handles quotes/commas)
+## Utils
+parseCsvToTsv.js: normalize smart quotes; papaparse with fallback; sanitizeRows -> commit cell as HYPERLINK(baseUrl or parsed URL, short hash 7 chars) + message; parseCsvRows export.
+errorHandler.js: createSafeAsync wraps async, routes errors to setter.
 
 ## Components
-ErrorDisplay.jsx - reusable error banner
-
-## Data Flow
-User input → parseCsvToTsv util → setState(tsvOutput) → clipboard via createSafeAsync
-
-## Missing (TODO)
-/src/utils/ - consider more helpers for future features
-/src/components/ - extract more UI as needed
+ErrorDisplay.jsx: simple error banner.

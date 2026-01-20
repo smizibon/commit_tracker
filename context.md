@@ -1,48 +1,37 @@
 # CSV to Excel Converter - Project Context
 
 ## ⚖️ LLM Ground Rules (STRICT)
-- **Reusable-First**: Scan `src/utils/` and `src/components/` before writing code.
-- **Generic Logic**: Parametrize functions; avoid hardcoded magic values.
-- **Error Safety**: Wrap async in `ErrorHandler`; use `ErrorDisplay` for UI. No crashes.
-- **Testable UI**: Mandatory `data-testid="component-element-type"` (kebab-case) on all interactive elements.
-- **Doc-First Update**: Update relevant `CONTEXT.md` files *after* verifying code stability.
+- Reuse first: check `src/utils/`, `src/components/` before new code.
+- Generic logic: avoid hardcoded magic values.
+- Error safety: wrap async with `createSafeAsync`; show UI errors with `ErrorDisplay`.
+- Testable UI: every interactive element needs a `data-testid` (kebab-case).
+- Doc discipline: update context files after stable code.
+- Token-thrifty docs: keep `context.md` concise for AI editors (retain details, minimal fluff).
 
 ## Project Overview
-React app: CSV (commit hashes/messages) → TSV (Excel-compatible)
+React/Vite app: CSV of commit hash/message → Excel-ready columns (hyperlink + message).
 
-## Tech Stack
-React 18 + Vite
-papaparse (CSV)
-Browser APIs (file/clipboard)
+## Tech
+React 18 + Vite; papaparse; browser FileReader/clipboard.
 
 ## Data Flow
-Input: "hash","message"
-Output: hash<TAB>message
+Input CSV rows → parseCsvRows → commit column (HYPERLINK with short hash display) + message column → copy buttons.
 
-## Structure
-/src/App.jsx - main component
-/src/App.css - styles
-/src/components/ - reusable UI
-/src/components/ErrorDisplay.jsx - shared error banner
-/src/utils/ - helper functions
-/src/utils/parseCsvToTsv.js - CSV→TSV logic (papaparse)
-/src/utils/errorHandler.js - createSafeAsync wrapper
-/context.md - this file
+## Structure (key files)
+`src/App.jsx` main UI (inputs, dual outputs, copy buttons, git-log snippets, base URL field)
+`src/App.css` styling
+`src/components/ErrorDisplay.jsx` error banner
+`src/utils/parseCsvToTsv.js` CSV parsing + hyperlink formatting
+`src/utils/errorHandler.js` async wrapper
+`context.md`, `src/context.md`
 
 ## Features
-1. Manual CSV paste
-2. File upload (.csv/.txt)
-3. CSV parsing (handles quotes/commas)
-4. TSV generation
-5. Clipboard copy
-6. Error handling
-7. data-testid on interactive elements (kebab-case)
+- Paste or upload CSV (.csv/.txt)
+- Normalize smart quotes; papaparse with fallback
+- Hyperlink commit column using base URL + short hash (7 chars); message column
+- Copy buttons: commit-only, message-only, both (TSV)
+- Git log command snippets (all commits, last 50) with copy buttons
+- Error display; testids everywhere
 
 ## Status
-✅ Phase 1: Setup complete
-✅ Phase 2: Core functionality complete
-✅ Phase 3: File upload complete
-✅ Playwright tested: 8/8 passed
-
-## Last Updated
-2026-01-20
+Main branch active; last build/pass: 2026-01-20
