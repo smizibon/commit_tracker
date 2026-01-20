@@ -14,6 +14,7 @@ function App() {
   const [commitCopied, setCommitCopied] = useState(false);
   const [messageCopied, setMessageCopied] = useState(false);
   const [snippetCopied, setSnippetCopied] = useState(false);
+  const [snippetCopied50, setSnippetCopied50] = useState(false);
   const runSafeAsync = createSafeAsync(setError);
 
   // Sample data for testing
@@ -21,11 +22,13 @@ function App() {
 "d7c8223fba3184e3d105264e4d5a434eaa4c9be2","Stopped the older-backfill sentinel from pushing the page down when it adds new messages from batch response."`;
 
   const gitLogCommand = `git log --pretty=format:'"%H","%s"' > commits.csv`;
+  const gitLogCommand50 = `git log -n 50 --pretty=format:'"%H","%s"' > commits.csv`;
 
   const processCSV = () => {
     setCommitCopied(false);
     setMessageCopied(false);
     setSnippetCopied(false);
+    setSnippetCopied50(false);
     try {
       const rows = parseCsvRows(csvInput, baseUrl);
       const commits = rows.map((row) => row?.[0] ?? '').join('\n');
@@ -63,6 +66,7 @@ function App() {
       setCommitCopied(false);
       setMessageCopied(false);
       setSnippetCopied(false);
+      setSnippetCopied50(false);
     };
     reader.onerror = () => {
       setError('Error reading file');
@@ -115,6 +119,7 @@ function App() {
     setCommitCopied(false);
     setMessageCopied(false);
     setSnippetCopied(false);
+    setSnippetCopied50(false);
   };
 
   const handleBaseUrlChange = (e) => {
@@ -130,13 +135,23 @@ function App() {
     setCommitCopied(false);
     setMessageCopied(false);
     setSnippetCopied(false);
+    setSnippetCopied50(false);
   };
 
   const copyGitSnippet = () =>
     runSafeAsync(async () => {
       await navigator.clipboard.writeText(gitLogCommand);
       setSnippetCopied(true);
+      setSnippetCopied50(false);
       setTimeout(() => setSnippetCopied(false), 2500);
+    });
+
+  const copyGitSnippet50 = () =>
+    runSafeAsync(async () => {
+      await navigator.clipboard.writeText(gitLogCommand50);
+      setSnippetCopied50(true);
+      setSnippetCopied(false);
+      setTimeout(() => setSnippetCopied50(false), 2500);
     });
 
   return (
@@ -196,6 +211,20 @@ function App() {
                 </button>
               </div>
               <pre className="code-snippet__block" data-testid="git-log-snippet">{gitLogCommand}</pre>
+            </div>
+
+            <div className="code-snippet" aria-label="git log csv command 50">
+              <div className="code-snippet__header">
+                <div className="code-snippet__title">Generate last 50 commits CSV:</div>
+                <button
+                  onClick={copyGitSnippet50}
+                  className="btn btn-ghost"
+                  data-testid="copy-git-snippet-50-button"
+                >
+                  {snippetCopied50 ? '✓ Copied' : '📋 Copy'}
+                </button>
+              </div>
+              <pre className="code-snippet__block" data-testid="git-log-snippet-50">{gitLogCommand50}</pre>
             </div>
 
             <label className="field-label" htmlFor="base-url-input">
