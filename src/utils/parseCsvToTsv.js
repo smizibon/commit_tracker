@@ -4,21 +4,23 @@ const SMART_DOUBLE_OPEN = /[“«]/g;
 const SMART_DOUBLE_CLOSE = /[”»]/g;
 const SMART_SINGLE = /[’‘]/g;
 
-// If a commit URL or hash is provided, output an Excel-friendly hyperlink that displays the hash.
-// Example output: =HYPERLINK("https://.../commits/<hash>","<hash>")
+// If a commit URL or hash is provided, output an Excel-friendly hyperlink that displays the short hash (7 chars).
+// Example output: =HYPERLINK("https://.../commits/<hash>","<shortHash>")
 function formatCommitCell(value, baseUrl) {
   if (!value) return value;
 
   const match = value.match(/(https?:\/\/[^\s"']*\/commits\/)([a-fA-F0-9]+)/);
   if (match) {
     const [, prefix, hash] = match;
-    return `=HYPERLINK("${prefix}${hash}","${hash}")`;
+    const shortHash = hash.slice(0, 7);
+    return `=HYPERLINK("${prefix}${hash}","${shortHash}")`;
   }
 
   // If it's a bare hash and a baseUrl is provided, build the hyperlink.
   const bareHash = value.match(/^[a-fA-F0-9]{7,}$/);
   if (bareHash && baseUrl) {
-    return `=HYPERLINK("${baseUrl}${value}","${value}")`;
+    const shortHash = value.slice(0, 7);
+    return `=HYPERLINK("${baseUrl}${value}","${shortHash}")`;
   }
 
   return value;
