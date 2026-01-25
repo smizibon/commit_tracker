@@ -77,10 +77,10 @@ csv-to-excel-converter/
 │   ├── App.css           ✅ Beautiful styling
 │   ├── index.css         ✅ Global styles
 │   ├── main.jsx          ✅ React entry point
-│   └── context.md        ✅ AI context for src/
+│   └── agents.md         ✅ AI context for src/
 ├── public/               ✅ Static assets
 ├── sample-data.csv       ✅ Test data file
-├── context.md            ✅ Project-level context
+├── agents.md             ✅ Project-level context
 ├── TESTING.md            ✅ Testing guide
 ├── README.md             ✅ Complete documentation
 ├── package.json          ✅ Dependencies
@@ -144,9 +144,9 @@ npm install <package-name>
 
 ### 🎯 Context Files for AI
 
-Created `context.md` files at multiple levels:
-- **Root level** (`/context.md`): Project overview and structure
-- **Source level** (`/src/context.md`): Component details and logic
+Created `agents.md` files at multiple levels:
+- **Root level** (`/agents.md`): Project overview and structure
+- **Source level** (`/src/agents.md`): Component details and logic
 
 These files help AI editors maintain context as the project grows, preventing context limit issues.
 
@@ -154,8 +154,8 @@ These files help AI editors maintain context as the project grows, preventing co
 
 1. **README.md** - Complete project documentation
 2. **TESTING.md** - Step-by-step testing guide
-3. **context.md** (root) - Project-level AI context
-4. **src/context.md** - Source code AI context
+3. **agents.md** (root) - Project-level AI context
+4. **src/agents.md** - Source code AI context
 5. **sample-data.csv** - Test data file
 
 ### ✨ Next Steps (Optional Enhancements)

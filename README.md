@@ -81,9 +81,9 @@ csv-to-excel-converter/
 │   ├── App.css          # Application styles
 │   ├── index.css        # Global styles
 │   ├── main.jsx         # React entry point
-│   └── context.md       # AI context for codebase
+│   └── agents.md        # AI context for codebase
 ├── public/              # Static assets
-├── context.md           # Project-level context
+├── agents.md            # Project-level context
 ├── package.json         # Dependencies
 └── README.md            # This file
 ```

@@ -73,7 +73,7 @@ d7c8223fba3184e3d105264e4d5a434eaa4c9be2	Stopped the older-backfill sentinel
 - [x] Error handling and user feedback
 - [x] Responsive design with beautiful UI
 - [x] Instructions footer
-- [x] Context.md files for AI assistance
+- [x] Agents.md files for AI assistance
 
 ## Browser Testing
 

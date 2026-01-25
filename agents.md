@@ -18,15 +18,19 @@ React 18 + Vite; papaparse; browser FileReader/clipboard.
 Input CSV rows → parseCsvRows → commit column (HYPERLINK with short hash display) + message column → copy buttons.
 
 ## Structure (key files)
-`src/App.jsx` main UI (inputs, dual outputs, copy buttons, git-log snippets, base URL field)
-`src/App.css` styling
-`src/components/ErrorDisplay.jsx` error banner
-`src/utils/parseCsvToTsv.js` CSV parsing + hyperlink formatting
-`src/utils/errorHandler.js` async wrapper
-`context.md`, `src/context.md`
+`src/main.jsx` React entry (renders router)
+`src/router.jsx` routes: `/` hub, `/projects/commit-converter` app
+`src/App.jsx` shim exports commit converter project
+`src/app/hub/Hub.jsx` + `Hub.css` hub landing
+`src/app/projects/commit-converter/CommitConverterApp.jsx` + `App.css` core app UI
+`src/shared/components/ErrorDisplay.jsx` error banner
+`src/shared/utils/parseCsvToTsv.js` CSV parsing + hyperlink formatting
+`src/shared/utils/errorHandler.js` async wrapper
+`agents.md`, `src/agents.md`
 
 ## Features
-- Paste or upload CSV (.csv/.txt)
+- Hub landing with project cards (router-based)
+- Commit converter app: paste or upload CSV (.csv/.txt)
 - Normalize smart quotes; papaparse with fallback
 - Hyperlink commit column using base URL + short hash (7 chars); message column
 - Copy buttons: commit-only, message-only, both (TSV)

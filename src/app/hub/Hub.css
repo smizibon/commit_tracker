@@ -1,0 +1,87 @@
+.hub {
+  min-height: 100vh;
+  background: #0b1021;
+  color: #e2e8f0;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.hub__hero {
+  padding: 48px 24px 24px;
+  text-align: center;
+}
+
+.hub__title {
+  margin: 0;
+  font-size: 2.4rem;
+  font-weight: 800;
+}
+
+.hub__subtitle {
+  margin: 10px 0 0;
+  color: #cbd5e1;
+  font-size: 1.05rem;
+}
+
+.hub__grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  padding: 0 24px 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hub__card {
+  background: linear-gradient(145deg, #11182f, #0c1225);
+  border: 1px solid #1f2937;
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+}
+
+.hub__card-title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.hub__card-desc {
+  margin: 0;
+  color: #cbd5e1;
+  line-height: 1.5;
+  font-size: 0.98rem;
+}
+
+.hub__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding: 10px 12px;
+  color: #0ea5e9;
+  text-decoration: none;
+  font-weight: 600;
+  border: 1px solid rgba(14,165,233,0.25);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.hub__link:hover {
+  background: rgba(14,165,233,0.1);
+  border-color: rgba(14,165,233,0.5);
+}
+
+.hub__footer {
+  text-align: center;
+  padding: 16px 24px 32px;
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+.hub__tagline {
+  margin: 4px 0 0;
+}
