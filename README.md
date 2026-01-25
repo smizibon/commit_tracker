@@ -1,6 +1,6 @@
-# CSV to Excel Converter
+# QA Workflow
 
-A React application that converts CSV data (commit hashes and messages) into Excel-compatible TSV format. Perfect for handling git commit data that needs to be imported into spreadsheets.
+A React/Vite app with a commit-converter workflow that turns CSV commit data (hashes + messages) into Excel-compatible TSV output. Built as a hub to host QA utilities.
 
 ## Features
 
@@ -75,7 +75,7 @@ d7c8223fba3184e3d105264e4d5a434eaa4c9be2	Updated documentation
 ## Project Structure
 
 ```
-csv-to-excel-converter/
+qa-workflow/
 ├── src/
 │   ├── App.jsx          # Main application component
 │   ├── App.css          # Application styles

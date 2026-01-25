@@ -2,7 +2,7 @@
 
 ## ✅ Project Successfully Created!
 
-Your CSV to Excel Converter React application is now ready and running!
+Your QA Workflow React application is now ready and running!
 
 ### 🚀 Access Your Application
 - **Local URL**: http://localhost:5173/
@@ -71,7 +71,7 @@ Your CSV to Excel Converter React application is now ready and running!
 ### 📁 Project Structure
 
 ```
-csv-to-excel-converter/
+qa-workflow/
 ├── src/
 │   ├── App.jsx           ✅ Main component with all logic
 │   ├── App.css           ✅ Beautiful styling
